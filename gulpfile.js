@@ -47,10 +47,12 @@ function styleFunc() {
 //   .pipe(cleanCSS({level: { 1: { specialComments: 0 } },compatibility: 'ie8'}))
   .pipe(cleanCSS())
   .pipe(dest('./app/css/'))
+  .pipe(browserSync.stream()) // следим за изменением файлов
 }
 
 function startWatch(){
   watch([ './app/**/*.js', '!app/**/*.min.js' ], scripts) 
+  watch([ './app/**/*.sass', '!app/**/*.min.css' ], styleFunc)
   // выбрать все файлы js, в том числе в подпапках
 }
 
@@ -58,5 +60,5 @@ function startWatch(){
 exports.BrowserSync = fBrowserSync;
 exports.scripts = scripts;
 exports.styles = styleFunc;
-exports.default = parallel(scripts, fBrowserSync, styleFunc, startWatch)
+exports.default = parallel(styleFunc, scripts, fBrowserSync, startWatch)
 // запуск сборщика. пишем в консоли: gulp
